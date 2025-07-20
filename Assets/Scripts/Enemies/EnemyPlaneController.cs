@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyPlaneController : MonoBehaviour
@@ -81,11 +80,6 @@ public class EnemyPlaneController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("BulletPlayer"))
@@ -114,12 +108,19 @@ public class EnemyPlaneController : MonoBehaviour
         // AFTER DELAY TIME, IF ALIVE -> SHOOT PLAYER
         if (enemyInfo.GetCurrentHealth() > 0f)
         {
-            GameObject bulletEnemy = Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+            GameObject bulletEnemy = GetBulletInPool();
+            if (bulletEnemy == null)
+            {
+                bulletEnemy = Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+            }
+            else
+            {
+                bulletEnemy.transform.position = transform.position;
+                bulletEnemy.transform.rotation = transform.rotation;
+                bulletEnemy.gameObject.SetActive(true);
+            }
             bulletEnemy.GetComponent<BulletEnemy>().SetStrength(enemyInfo.GetStrength());
-
-            //audioSource.clip = AudioManager.Instance.lazerShoot;
-            //audioSource.Play();
-
+            bulletEnemy.transform.localScale = new Vector2(1f, 1f);
             if (gameObject.CompareTag("Boss"))
             {
                 bulletEnemy.transform.localScale = new Vector2(5f, 5f);
@@ -132,23 +133,37 @@ public class EnemyPlaneController : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
             if (enemyInfo.GetCurrentHealth() > 0f)
             {
-                GameObject bulletEnemy = Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+                GameObject bulletEnemy = GetBulletInPool();
+                if (bulletEnemy == null)
+                {
+                    bulletEnemy = Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+                }
+                else
+                {
+                    bulletEnemy.transform.position = transform.position;
+                    bulletEnemy.transform.rotation = transform.rotation;
+                    bulletEnemy.gameObject.SetActive(true);
+                }
                 bulletEnemy.GetComponent<BulletEnemy>().SetStrength(enemyInfo.GetStrength());
                 bulletEnemy.transform.localScale = new Vector2(5f, 5f);
-
-                //audioSource.clip = AudioManager.Instance.lazerShoot;
-                //audioSource.Play();
             }
 
             yield return new WaitForSeconds(0.2f);
             if (enemyInfo.GetCurrentHealth() > 0f)
             {
-                GameObject bulletEnemy = Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+                GameObject bulletEnemy = GetBulletInPool();
+                if (bulletEnemy == null)
+                {
+                    bulletEnemy = Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+                }
+                else
+                {
+                    bulletEnemy.transform.position = transform.position;
+                    bulletEnemy.transform.rotation = transform.rotation;
+                    bulletEnemy.gameObject.SetActive(true);
+                }
                 bulletEnemy.GetComponent<BulletEnemy>().SetStrength(enemyInfo.GetStrength());
                 bulletEnemy.transform.localScale = new Vector2(5f, 5f);
-
-                //audioSource.clip = AudioManager.Instance.lazerShoot;
-                //audioSource.Play();
             }
         }
 
@@ -161,4 +176,16 @@ public class EnemyPlaneController : MonoBehaviour
         bulletBag = gameObject;
     }
     //
+
+    GameObject GetBulletInPool()
+    {
+        foreach (Transform bullet in bulletBag.transform)
+        {
+            if (bullet.gameObject.activeSelf == false)
+            {
+                return bullet.gameObject;
+            }
+        }
+        return null;
+    }
 }

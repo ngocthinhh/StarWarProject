@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BulletEnemy : MonoBehaviour
@@ -10,7 +8,7 @@ public class BulletEnemy : MonoBehaviour
     {
         Move();
 
-        DestroyWhenOutMap();
+        DisableWhenOutMap();
     }
 
     private void Move()
@@ -18,16 +16,16 @@ public class BulletEnemy : MonoBehaviour
         transform.Translate(Vector3.up * Time.deltaTime * 10f);
     }
 
-    private void DestroyWhenOutMap()
+    private void DisableWhenOutMap()
     {
         if (transform.position.x < -23 || transform.position.x > 23)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         if (transform.position.y < -23 || transform.position.y > 23)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -47,7 +45,7 @@ public class BulletEnemy : MonoBehaviour
             && !collision.CompareTag("BulletPlayer") && !collision.CompareTag("BulletOrange") && !collision.CompareTag("BulletGreen")
             && !collision.CompareTag("BulletWhite") && !collision.CompareTag("BulletPurple") && !collision.CompareTag("BulletGolden"))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

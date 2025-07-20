@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -112,6 +110,7 @@ public class SceneMachine : MonoBehaviour
     private void Start()
     {
         SelectEasyMode();
+        AudioManager.Instance.PlayBackground(AudioManager.Instance.menu);
     }
 
     public void SelectEasyMode()

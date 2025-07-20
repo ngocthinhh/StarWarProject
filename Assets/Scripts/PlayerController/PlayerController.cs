@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed;
 
     // Other
-    private Animator animator;
+    [SerializeField] private Animator animator;
     private Camera camera;
 
     [SerializeField] private GameObject bullet;
@@ -66,11 +65,6 @@ public class PlayerController : MonoBehaviour
         LoadStrengthBar();
         LoadSpeedBar();
         LoadTimeBar(0f);
-    }
-
-    private void Update()
-    {
-
     }
 
     private void FixedUpdate()
@@ -231,8 +225,30 @@ public class PlayerController : MonoBehaviour
             audioSource.clip = AudioManager.Instance.lazerShoot;
             audioSource.Play();
 
-            Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+            GameObject bulletInPool = GetBulletInPool();
+            if (bulletInPool == null)
+            {
+                bulletInPool = Instantiate(bullet, transform.position, transform.rotation, bulletBag.transform);
+            }
+            else
+            {
+                bulletInPool.transform.position = transform.position;
+                bulletInPool.transform.rotation = transform.rotation;
+                bulletInPool.SetActive(true);
+            }
         }
+    }
+
+    GameObject GetBulletInPool()
+    {
+        foreach (Transform bullet in bulletBag.transform)
+        {
+            if (bullet.gameObject.activeSelf == false)
+            {
+                return bullet.gameObject;
+            }
+        }
+        return null;
     }
 
     // LOAD BAR UI

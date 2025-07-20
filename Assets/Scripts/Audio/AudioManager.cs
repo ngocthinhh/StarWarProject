@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -41,14 +39,6 @@ public class AudioManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         //
-
-
-    }
-
-    private void Start()
-    {
-        backgroundSound.clip = menu;
-        backgroundSound.Play();
     }
 
     public void PlayBackground(AudioClip sound)
